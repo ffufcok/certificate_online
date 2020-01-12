@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Справки школа 1411</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body style="background-image: url("{% static 'img/logo.png' %}")">
+<div class="wrapper">
+    <div class="header">
+        <div class="inner_header">
+            <img src="{% static 'img/logo.png' %}" alt="ЭМБЛЕМА ШКОЛЫ" height="50" class="logo">
+            <a class="menu" href="http://google.com">Заказать справку</a>
+            <a class="menu" href="https://sch1411.mskobr.ru/#/">Сайт школы</a>
+            <a class="menu" href="http://google.com">О нас</a>
+            <a class="menu menu_right" href="http://google.com">Личный кабинет</a>
+        </div>
+    </div>
+    {% block content %}
+    {% endblock %}
+    <div class="footer">
+        <img src="{% static 'img/logo_2.png' %}" alt="ШАГ В БУДУЩЕЕ" height="100" class="logo_2">
+        <div class="inner_footer">
+
+            <div class="left_info">© 2019 - 2020 Толстобров Илья<br/>
+                по всем вопросам пишите по адресу <br/> tol063115@mail.ru
+            </div>
+            <div class="footer_info">Телефон: 8-926-538-52-22<br/>
+                Адрес: Северный бульвар, дом 1А
+            </div>
+
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
