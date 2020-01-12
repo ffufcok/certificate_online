@@ -13,9 +13,9 @@
     <div class="header">
         <div class="inner_header">
             <img src="{% static 'img/logo.png' %}" alt="ЭМБЛЕМА ШКОЛЫ" height="50" class="logo">
-            <a class="menu" href="http://google.com">Заказать справку</a>
+            <a class="menu" href="{% url 'homepage' %}">Домой</a>
+            <a class="menu" href="{% url 'new_order' %}">Заказать справку</a>
             <a class="menu" href="https://sch1411.mskobr.ru/#/">Сайт школы</a>
-            <a class="menu" href="http://google.com">О нас</a>
             <a class="menu menu_right" href="http://google.com">Личный кабинет</a>
         </div>
     </div>
