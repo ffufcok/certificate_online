@@ -20,6 +20,7 @@ urlpatterns = [
     path('order/', include('order.urls')),
     path('admin/', admin.site.urls),
     path('jet_api/', include('jet_django.urls')),
-    path('', include('order.urls'))
+    path('', include('order.urls')),
+    path('organisations', include('organisations.urls'))
 
 ]

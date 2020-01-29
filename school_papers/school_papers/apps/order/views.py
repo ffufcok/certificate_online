@@ -16,13 +16,15 @@ def new_order(request):
         if form.is_valid():
             editable = form.save(commit=False)
             editable.date = timezone.now()
-            # doc = DocxTemplate('static/docs/d.docx')
-            # context = {'number': editable.id, 'surname': editable.surname, 'name': editable.name,
-            #            'father': editable.father, 'class': editable.class_letter}
-            # doc.render(context)
+            doc = DocxTemplate("D:/Desktop/D_school_papers/school_papers/school_papers/doc_template/d.docx")
+            context = {'number': editable.id, 'surname': editable.surname, 'name': editable.name,
+                       'father': editable.father, 'class': editable.class_letter}
+            doc.render(context)
             msg = EmailMessage('Справка', 'Справка с места учёбы', 'tol063115@gmail.com', [editable.email])
             msg.content_subtype = "html"
-            # msg.attach_file(doc)
+            name = "D:/Desktop/D_school_papers/school_papers/school_papers/generated_docx/generated_doc_.docx"
+            doc.save(name)
+            msg.attach_file(name)
             msg.send()
             form.save()
     return render(request, 'order/new_order.html', {'form': form})
