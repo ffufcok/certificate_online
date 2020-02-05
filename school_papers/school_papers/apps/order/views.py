@@ -3,6 +3,7 @@ from django.core.mail import EmailMessage
 from .forms import OrderForm
 from django.utils import timezone
 from docxtpl import DocxTemplate
+from django.conf import settings
 
 
 def homepage(request):
@@ -22,7 +23,7 @@ def new_order(request):
             doc.render(context)
             msg = EmailMessage('Справка', 'Справка с места учёбы', 'tol063115@gmail.com', [editable.email])
             msg.content_subtype = "html"
-            name = "D:/Desktop/D_school_papers/school_papers/school_papers/generated_docx/generated_doc_.docx"
+            name = settings.MEDIA_ROOT + "\generated_docx\generated_doc_.docx"
             doc.save(name)
             msg.attach_file(name)
             msg.send()

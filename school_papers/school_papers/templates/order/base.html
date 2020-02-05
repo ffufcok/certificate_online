@@ -5,20 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Справки школа 1411</title>
+
+
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </head>
 
 <body>
 <div>
-
-
-
-    <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark nav-pills nav-fill">
-      <a class="navbar-brand" href="#">
+    <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark nav-pills nav-fill mb">
+      <a class="navbar-brand" href="{% url 'homepage' %}">
           <img src="{% static 'img/logo.png' %}" width="30" height="30" alt="">
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,14 +27,20 @@
         <div class="navbar-nav">
           <a class="nav-item nav-link active" href="{% url 'homepage' %}">Домой<span class="sr-only">(current)</span></a>
           <a class="nav-item nav-link" href="{% url 'new_order' %}">Заказать справку</a>
-          <a class="nav-item nav-link" href="{% url 'registration' %}">Регистрация</a>
-          <a class="nav-item nav-link disabled" href="#">Личный кабинет</a>
+          {% if user.is_authenticated %}
+            <a class="nav-item nav-link" href="{% url 'profile' %}">Личный кабинет</a>
+            <a class="nav-item nav-link" href="{% url 'logout' %}">Выйти</a>
+          {% else %}
+            <a class="nav-item nav-link" href="{% url 'login' %}">Войти</a>
+            <a class="nav-item nav-link" href="{% url 'registration' %}">Регистрация</a>
+          {% endif %}
+
       </div>
     </div>
   </nav>
     <div class="row">
     <div class="col-md-4"></div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         {% if messages %}
         {% for m in messages %}
             <div class="alert alert-{{ m.tags }}}">
