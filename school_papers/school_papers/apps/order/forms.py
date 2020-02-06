@@ -20,5 +20,3 @@ class OrderForm(forms.Form):
     class_letter = forms.CharField(label='Класс', max_length=10)
     email = forms.EmailField(label='Электронная почта')
     schools = forms.ChoiceField(choices=SCHOOL_CHOICES)
-
-
