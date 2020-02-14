@@ -33,7 +33,6 @@ def register(request):
                 'uid': uid,
                 'token': token,
             })
-
             to_email = form.cleaned_data.get('email')
             email = EmailMessage(mail_subject, message, to=[to_email])
             email.content_subtype = "html"
@@ -60,7 +59,7 @@ def activate(request, uidb64=1, token=1):
         user = User.objects.get(pk=uid)
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
-    if user is not None and account_activation_token.check_token(user, token):
+    if user and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
         login(request, user)

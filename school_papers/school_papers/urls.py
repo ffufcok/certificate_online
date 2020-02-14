@@ -12,6 +12,7 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='order/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='order/logout.html'), name='logout'),
     path('activate/', include('organisations.urls')),
+    path('confirm/', include('order.urls')),
 ]
 
 if settings.DEBUG:

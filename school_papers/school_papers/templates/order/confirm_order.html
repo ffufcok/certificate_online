@@ -1,0 +1,15 @@
+{% autoescape off %}
+Здравствуйте!
+Нажмите на кнопку, чтобы одобрить справку <br>
+<div>
+    <div>Фамилия: {{ surname }}</div>
+    <div>Имя: {{ name }}</div>
+    <div>Отчество: {{ father }}</div>
+    <div>Класс: {{ class_letter }}</div>
+
+</div>
+
+<a href="http://{{ domain }}{% url 'confirm' token=token user_email=user_email %}">
+    <button class="btn btn-outline-info mb-3">Одобрить справку</button>
+</a>
+{% endautoescape %}
