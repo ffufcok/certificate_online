@@ -5,7 +5,7 @@ from . import views
 urlpatterns = [
     path('', views.homepage, name='homepage'),
     path('makeorder/', views.new_order, name='new_order'),
-    path('<str:user_email>/<str:token>', views.confirm,
+    path('confirm/<str:user_email>/<str:token>', views.confirm,
          name='confirm'),
 
 ]

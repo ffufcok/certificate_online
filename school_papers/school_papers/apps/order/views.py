@@ -6,6 +6,7 @@ from .forms import OrderForm
 from django.utils import timezone
 from datetime import datetime
 from docxtpl import DocxTemplate
+from docx import Document
 from django.conf import settings
 from django.views import View
 from django.shortcuts import render, redirect, HttpResponse
@@ -13,7 +14,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import OrderForm
 from .models import Schools
-from django.shortcuts import render
 from django.contrib.sites.shortcuts import get_current_site
 from .tokens import email_token
 from django.core.mail import EmailMessage
@@ -49,15 +49,17 @@ def homepage(request):
 #             form.save()
 #     return render(request, 'order/new_order.html', {'form': form})
 
+
+@login_required
 def new_order(request):
     email_autofill = request.user.email
     form = OrderForm(initial={'email': email_autofill})
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
-
             editable = form.save(commit=False)
             editable.date = datetime.now()
+            editable.save()
 
             # Send an email to the user with the token:
             surname_headline = form.cleaned_data.get('surname')
@@ -83,7 +85,7 @@ def new_order(request):
             to_email_string = to_email_queryset_string[
                               to_email_queryset_string.find(':') + 3:to_email_queryset_string.rfind('}') - 1]
 
-            # sending confirmation email to school secretary
+            # sending confirmation eцвmail to school secretary
 
             email = EmailMessage(mail_subject, message, to=[to_email_string])
             email.content_subtype = "html"
@@ -93,7 +95,8 @@ def new_order(request):
 
             template_path = settings.MEDIA_ROOT + '\doc_template\d.docx'
             doc = DocxTemplate(template_path)
-            context = {'number': editable.pk, 'surname': form.cleaned_data.get('surname'),
+            number_of_document = str(editable.pk).zfill(7)
+            context = {'number': number_of_document, 'surname': form.cleaned_data.get('surname'),
                        'name': form.cleaned_data.get('name'),
                        'father': form.cleaned_data.get('father'), 'class': form.cleaned_data.get('class_letter'),
                        'date': datetime.today().strftime("%d.%m.%Y")}
@@ -103,8 +106,8 @@ def new_order(request):
 
             # convert docx to pdf
 
-            # in_file = settings.MEDIA_ROOT + '\generated_docx\generated_doc_' + str(token) + '.docx'
-            # out_file = settings.MEDIA_ROOT + '\generated_docx\generated_doc_' + str(token) + '1' + '.pdf'
+            # in_file = settings.MEDIA_ROOT + '\generated_docx\generated_doc_' + str(token)
+            # out_file = settings.MEDIA_ROOT + '\generated_docx\generated_doc_' + str(token) + '1'
             #
             # word = comtypes.client.CreateObject('Word.Application')
             # docx = word.Documents.Open(in_file)
@@ -113,10 +116,6 @@ def new_order(request):
             # word.Quit()
 
             form.save()
-
-            # success message!
-
-            messages.success(request, to_email_string)
             return redirect('homepage')
     return render(request, 'order/new_order.html', {'form': form})
 
