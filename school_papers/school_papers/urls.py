@@ -10,7 +10,7 @@ urlpatterns = [
     path('jet_api/', include('jet_django.urls')),
     path('login/', auth_views.LoginView.as_view(template_name='order/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='order/logout.html'), name='logout'),
-    path('profile/', include('organisations.urls')),
+    path('profile/', include('organizations.urls')),
 
     path('password-reset/',
          auth_views.PasswordResetView.as_view(

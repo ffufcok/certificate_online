@@ -23,6 +23,12 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 import comtypes.client
+import pdfkit
+import mammoth
+from xhtml2pdf import pisa
+from io import StringIO as StringIO
+from django.template.loader import get_template
+from django.template import Context
 
 
 def homepage(request):
@@ -85,7 +91,7 @@ def new_order(request):
             to_email_string = to_email_queryset_string[
                               to_email_queryset_string.find(':') + 3:to_email_queryset_string.rfind('}') - 1]
 
-            # sending confirmation eцвmail to school secretary
+            # sending confirmation email to school secretary
 
             email = EmailMessage(mail_subject, message, to=[to_email_string])
             email.content_subtype = "html"
