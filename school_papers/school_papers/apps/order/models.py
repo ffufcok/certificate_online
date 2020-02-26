@@ -8,7 +8,7 @@ class Info(models.Model):
     class_letter = models.CharField('класс', max_length=50)
     email = models.EmailField('email')
     date = models.DateTimeField('дата заявки')
-    confirmation = models.IntegerField('подтверждение', default=0)
+    confirmation = models.IntegerField('потверждение', default=0)
     schools = models.CharField('школа', max_length=50, default='НЕИЗВЕСТНО')
 
     class Meta:
@@ -26,3 +26,7 @@ class Schools(models.Model):
     class Meta:
         verbose_name = 'Информацию о школе'
         verbose_name_plural = 'Информация о школе'
+
+
+
+
