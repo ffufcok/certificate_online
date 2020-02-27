@@ -1,5 +1,7 @@
 import sys
 import os
+import comtypes.client
+
 from django.shortcuts import render
 from django.core.mail import EmailMessage
 from .forms import OrderForm
@@ -22,7 +24,6 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
-import comtypes.client
 import pdfkit
 import mammoth
 from xhtml2pdf import pisa
@@ -85,8 +86,9 @@ def new_order(request):
             })
 
             # getting school email by its name from ChoiceField
+            current_school = form.cleaned_data.get('schools')
 
-            to_email_queryset = Schools.objects.filter(name=form.cleaned_data.get('schools')).values('email').get()
+            to_email_queryset = Schools.objects.filter(name=current_school).values('email').get()
             to_email_queryset_string = str(to_email_queryset)
             to_email_string = to_email_queryset_string[
                               to_email_queryset_string.find(':') + 3:to_email_queryset_string.rfind('}') - 1]
@@ -96,6 +98,7 @@ def new_order(request):
             email = EmailMessage(mail_subject, message, to=[to_email_string])
             email.content_subtype = "html"
             email.send()
+
 
             # creating document for current request and saving it locally
 
@@ -120,6 +123,10 @@ def new_order(request):
             # docx.SaveAs(out_file, FileFormat=17)
             # docx.Close()
             # word.Quit()
+            import sys
+            import os
+
+
 
             form.save()
             return redirect('homepage')
@@ -130,6 +137,7 @@ def confirm(request, token, user_email):
     name = settings.MEDIA_ROOT + '\generated_docx\generated_doc_' + str(token) + '.docx'
     email = EmailMessage('Поздравляем! Ваша справка одобрена!', 'Справка с мета учёбы одобрена секретарём',
                          to=[user_email])
+
     email.content_subtype = "html"
     email.attach_file(name)
     email.send()
