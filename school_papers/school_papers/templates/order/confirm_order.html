@@ -12,4 +12,7 @@
 <a href="http://{{ domain }}{% url 'confirm' token=token user_email=user_email %}">
     <button class="btn btn-outline-info mb-3">Одобрить справку</button>
 </a>
+<a href="http://{{ domain }}{% url 'decline' token=token user_email=user_email %}">
+    <button class="btn btn-outline-info mb-3">Отклонить справку</button>
+</a>
 {% endautoescape %}

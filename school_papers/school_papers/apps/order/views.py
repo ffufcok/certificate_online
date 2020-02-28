@@ -1,16 +1,6 @@
-import sys
-import os
-import comtypes.client
-
-from django.shortcuts import render
-from django.core.mail import EmailMessage
-from .forms import OrderForm
-from django.utils import timezone
 from datetime import datetime
 from docxtpl import DocxTemplate
-from docx import Document
 from django.conf import settings
-from django.views import View
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -19,42 +9,11 @@ from .models import Schools
 from django.contrib.sites.shortcuts import get_current_site
 from .tokens import email_token
 from django.core.mail import EmailMessage
-from django.contrib.auth import get_user_model, login, update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm
-from django.utils.encoding import force_bytes, force_text
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
-import pdfkit
-import mammoth
-from xhtml2pdf import pisa
-from io import StringIO as StringIO
-from django.template.loader import get_template
-from django.template import Context
 
 
 def homepage(request):
     return render(request, 'order/main.html', {})
-
-
-# def new_order(request):
-#     email_autofill = request.user.email
-#     form = OrderForm(initial={'email': email_autofill})
-#     if request.method == "POST":
-#         form = OrderForm(request.POST)
-#         if form.is_valid():
-#             editable = form.save(commit=False)
-#             doc = DocxTemplate("D:/Desktop/D_school_papers/school_papers/school_papers/doc_template/d.docx")
-#             context = {'number': editable.id, 'surname': editable.surname, 'name': editable.name,
-#                        'father': editable.father, 'class': editable.class_letter}
-#             doc.render(context)
-#             msg = EmailMessage('Справка', 'Справка с места учёбы', 'tol063115@gmail.com', [editable.email])
-#             msg.content_subtype = "html"
-#             name = settings.MEDIA_ROOT + "\generated_docx\generated_doc_.docx"
-#             doc.save(name)
-#             msg.attach_file(name)
-#             msg.send()
-#             form.save()
-#     return render(request, 'order/new_order.html', {'form': form})
 
 
 @login_required
@@ -85,7 +44,7 @@ def new_order(request):
                 'user_email': form.cleaned_data.get('email'),
             })
 
-            # getting school email by its name from ChoiceField
+            # getting school email and name in English by its name from ChoiceField
             current_school = form.cleaned_data.get('schools')
 
             to_email_queryset = Schools.objects.filter(name=current_school).values('email').get()
@@ -93,16 +52,21 @@ def new_order(request):
             to_email_string = to_email_queryset_string[
                               to_email_queryset_string.find(':') + 3:to_email_queryset_string.rfind('}') - 1]
 
+            english_name_queryset = Schools.objects.filter(name=current_school).values('name_in_english').get()
+            english_name_queryset_string = str(english_name_queryset)
+            english_name_string = english_name_queryset_string[
+                                  english_name_queryset_string.find(':') + 3:english_name_queryset_string.rfind(
+                                      '}') - 1]
+
             # sending confirmation email to school secretary
 
             email = EmailMessage(mail_subject, message, to=[to_email_string])
             email.content_subtype = "html"
             email.send()
 
-
             # creating document for current request and saving it locally
 
-            template_path = settings.MEDIA_ROOT + '\doc_template\d.docx'
+            template_path = settings.MEDIA_ROOT + '\doc_template\school_' + english_name_string + '.docx'
             doc = DocxTemplate(template_path)
             number_of_document = str(editable.pk).zfill(7)
             context = {'number': number_of_document, 'surname': form.cleaned_data.get('surname'),
@@ -126,19 +90,34 @@ def new_order(request):
             import sys
             import os
 
-
-
             form.save()
+            messages.success(request, 'Заявка отправлена на рассмотрение секртарю!')
             return redirect('homepage')
     return render(request, 'order/new_order.html', {'form': form})
 
 
 def confirm(request, token, user_email):
-    name = settings.MEDIA_ROOT + '\generated_docx\generated_doc_' + str(token) + '.docx'
-    email = EmailMessage('Поздравляем! Ваша справка одобрена!', 'Справка с мета учёбы одобрена секретарём',
-                         to=[user_email])
+    try:
+        name = settings.MEDIA_ROOT + '\generated_docx\generated_doc_' + str(token) + '.docx'
+        message = render_to_string('order/confirmed_document.html')
+        email = EmailMessage('Заявка на справку одобрена!', message,
+                             to=[user_email])
+        email.content_subtype = "html"
+        email.attach_file(name)
+        email.send()
+        messages.success(request, 'Справка успешно одобрена!')
+        return redirect("homepage")
+    except FileNotFoundError:
+        return HttpResponse('Ссылка недействительна!')
 
+
+def decline(request, token, user_email):
+    current_site = get_current_site(request)
+    message = 'Заявка на получение справки на ' + str(current_site) + ' отклонена. Проверте правильность введённых данных' \
+                                                                 ' и попробуте снова'
+    email = EmailMessage('Заявка на справку отклонена', message,
+                         to=[user_email])
     email.content_subtype = "html"
-    email.attach_file(name)
     email.send()
+    messages.success(request, 'Справка успешно отклонена!')
     return redirect("homepage")

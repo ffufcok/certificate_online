@@ -1,6 +1,6 @@
 {% autoescape off %}
-Hi {{ user.username }},
-Please click on the link to confirm your registration, <br>
+Здравствуйте, {{ user.username }},
+Пожалуйста, перейдите по ссыке ниже чтобы подтвердить регистрацию <br>
 <a href="http://{{ domain }}{% url 'activate' uidb64=uid token=token %}">
-<button class="btn btn-outline-info mb-3">Confirm registration!</button></a>
+<button class="btn btn-outline-info mb-3">Подтвердить регистрацию!</button></a>
 {% endautoescape %}
