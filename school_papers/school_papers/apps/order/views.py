@@ -87,8 +87,6 @@ def new_order(request):
             # docx.SaveAs(out_file, FileFormat=17)
             # docx.Close()
             # word.Quit()
-            import sys
-            import os
 
             form.save()
             messages.success(request, 'Заявка отправлена на рассмотрение секртарю!')
@@ -113,8 +111,9 @@ def confirm(request, token, user_email):
 
 def decline(request, token, user_email):
     current_site = get_current_site(request)
-    message = 'Заявка на получение справки на ' + str(current_site) + ' отклонена. Проверте правильность введённых данных' \
-                                                                 ' и попробуте снова'
+    message = 'Заявка на получение справки на ' + str(
+        current_site) + ' отклонена. Проверте правильность введённых данных' \
+                        ' и попробуте снова'
     email = EmailMessage('Заявка на справку отклонена', message,
                          to=[user_email])
     email.content_subtype = "html"

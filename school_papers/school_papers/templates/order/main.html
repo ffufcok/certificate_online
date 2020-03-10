@@ -1,22 +1,35 @@
 {% extends 'order/base.html' %}
 {% load static %}
 {% block content %}
-<div class=" group">
-    <div class="content">
-        <div class="inner_content">
+<!--<div class="group">-->
+<!--    <div class="content">-->
+<!--        <div class="inner_content">-->
 
-            <div class="content_text">Получаешь визу?</div>
-            <div class="content_text_1">Собираешься в лагерь?</div>
-            <div class="content_text_2">Получаешь социальную карту?</div>
-            <div class="content_text_final">Закажи справку с места обучения онлайн!</div>
-        </div>
+<!--            <div class="content_text">Получаешь визу?</div>-->
+<!--            <div class="content_text_1">Собираешься в лагерь?</div>-->
+<!--            <div class="content_text_2">Получаешь социальную карту?</div>-->
+<!--            <div class="content_text_final">Закажи справку с места обучения онлайн!</div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="sidebar">-->
+<!--        <div class="inner_sidebar">Виды справок-->
+<!--            <img class="paper" src="{% static 'img/paper.jpg' %}" alt="Справка" width="94%">-->
+
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<div class="banner">
+    <div class="app-text">
+        <h1>Получите справку <br> легко и быстро</h1>
+        <p>Получить справку с места учёбы теперь можно не выходя из дома.
+        Достаточно лишь оставтиь заявку на нашем сайте и после получить справку на почту</p>
     </div>
-    <div class="sidebar">
-        <div class="inner_sidebar">Виды справок
-            <img class="paper" src="{% static 'img/paper.jpg' %}" alt="Справка" width="94%">
-
-        </div>
+        <img class="app-picture" src="{% static 'img/signed_paper.jpg' %}" alt="">
+    <div class="here-button">
+        <a href="{% url 'new_order' %}"><button type="button" class="btn btn-primary">Заказать справку</button></a>
     </div>
 </div>
 {% endblock %}
+
+
 

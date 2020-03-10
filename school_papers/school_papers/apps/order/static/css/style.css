@@ -2,8 +2,7 @@ body {
     color: #333333;
     background: #fafafa !important;
     background-size: 100% !important;
-    height: 100%;
-    margin: 0;
+
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -128,6 +127,55 @@ a.article-title:hover {
 
 .wrapper {
     min-height: 100%;
+
+}
+
+.banner {
+    width: 80% !important;
+    height: 70% !important;
+    top: 25% !important;
+    left: 130px !important;
+    position: absolute !important;
+    display: compact !important;
+    margin-left: -400px;
+}
+
+.app-text {
+    width: 50%;
+    float: left;
+    margin-top: 100px;
+}
+
+.app-text h1{
+    font-size: 43px;
+    width: 640px;
+    position: relative;
+    margin-left: 40px;
+}
+
+.app-text p{
+    font-size: 15px;
+    width: 380px;
+    margin: 38px 0 30px 40px;
+    line-height: 25px;
+    color: #919191;
+
+
+}
+
+
+.app-picture {
+    width: 100%;
+    float: left;
+    margin-left: 130%;
+    margin-top: -43%;
+}
+
+.here-button {
+    float: right;
+    margin-right: 100px;
+    margin-top: -50%;
+
 
 }
 
